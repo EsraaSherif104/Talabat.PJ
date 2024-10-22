@@ -10,4 +10,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Talabat.Core\Talabat.Core.csproj" />
+    <ProjectReference Include="..\Talabat.Repository\Talabat.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
