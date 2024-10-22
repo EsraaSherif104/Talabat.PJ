@@ -29,15 +29,27 @@ namespace Talabt.APIS
             //StoreContext dbcontext = new StoreContext();//invaild
             //await dbcontext.Database.MigrateAsync();
 
-           using  var scope=app.Services.CreateScope();
+            using var scope = app.Services.CreateScope();
             //group of services lifetime scoped
             var services = scope.ServiceProvider;
             //services its self
-            var Dbcontext=services.GetRequiredService<StoreContext>();
-            //ask clr for creating object from dbcontext explicity
-             await  Dbcontext.Database.MigrateAsync();
-          //  scope.Dispose();
+            var loggerFactory=services.GetRequiredService<ILoggerFactory>();    
+            try
+            {
+                
+                var Dbcontext = services.GetRequiredService<StoreContext>();
+                //ask clr for creating object from dbcontext explicity
+                await Dbcontext.Database.MigrateAsync();
+                //  scope.Dispose();
 
+            }
+            catch (Exception ex)
+            {
+                var logger = loggerFactory.CreateLogger<Program>();
+                logger.LogError(ex, "An Error Occured During Appling the Migration ");
+
+
+            }
 
             #endregion
 
