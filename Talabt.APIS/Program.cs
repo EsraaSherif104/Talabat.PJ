@@ -37,10 +37,12 @@ namespace Talabt.APIS
             try
             {
                 
-                var Dbcontext = services.GetRequiredService<StoreContext>();
+                var dbcontext = services.GetRequiredService<StoreContext>();
                 //ask clr for creating object from dbcontext explicity
-                await Dbcontext.Database.MigrateAsync();
+                await dbcontext.Database.MigrateAsync();
                 //  scope.Dispose();
+                await  StoreContextSeed.SeedAsync(dbcontext);
+
 
             }
             catch (Exception ex)
@@ -53,6 +55,7 @@ namespace Talabt.APIS
 
             #endregion
 
+           
             #region Configure- Configure the HTTP request pipeline.
 
             if (app.Environment.IsDevelopment())
