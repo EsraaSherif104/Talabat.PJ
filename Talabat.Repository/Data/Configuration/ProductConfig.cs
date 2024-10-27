@@ -17,9 +17,9 @@ namespace Talabat.Repository.Data.Configuration
                         .WithMany()
                         .HasForeignKey(p => p.ProductBrandId);
 
-            builder.HasOne(p => p.productType)
+            builder.HasOne(p => p.ProductType)
                     .WithMany()
-                    .HasForeignKey(p => p.productTypeId);
+                    .HasForeignKey(p => p.ProductTypeId);
 
             builder.Property(p => p.Name).IsRequired()
                 .HasMaxLength(100);

@@ -15,6 +15,16 @@ namespace Talabt.APIS.Controllers
             this._productRepo = productRepo;
         }
         //get all product
+        //baseurl/api/product ->get
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
+        {
+            var products =await _productRepo.GetAllAsync();
+            //OkObjectResult result=new OkObjectResult(products); 
+            //return (result);
+            return Ok(products);
+
+        }
 
         //get product by id
 

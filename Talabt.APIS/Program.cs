@@ -25,8 +25,8 @@ namespace Talabt.APIS
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
-            builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(IGenericRepository<>));
-            
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
             #endregion
 
             var app = builder.Build();
@@ -59,8 +59,8 @@ namespace Talabt.APIS
             }
 
             #endregion
-
            
+
             #region Configure- Configure the HTTP request pipeline.
 
             if (app.Environment.IsDevelopment())
