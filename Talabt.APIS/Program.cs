@@ -71,6 +71,7 @@ namespace Talabt.APIS
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
