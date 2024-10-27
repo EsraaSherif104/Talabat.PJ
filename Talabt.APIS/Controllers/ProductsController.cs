@@ -32,7 +32,7 @@ namespace Talabt.APIS.Controllers
         {
             var product =await _productRepo.GetByIdAsync(id);
             return Ok(product);
-        }
+        }//
 
 
 
