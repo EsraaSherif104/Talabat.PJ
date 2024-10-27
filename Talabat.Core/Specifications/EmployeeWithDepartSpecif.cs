@@ -13,5 +13,11 @@ namespace Talabat.Core.Specifications
         {
             Include.Add(e => e.Department);
         }
+        public EmployeeWithDepartSpecif(int id):base(e=>e.Id==id)
+        {
+            Include.Add(e => e.Department);
+
+
+        }
     }
 }

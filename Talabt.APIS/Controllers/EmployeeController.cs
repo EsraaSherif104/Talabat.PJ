@@ -20,8 +20,17 @@ namespace Talabt.APIS.Controllers
         public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
         {
             var spec = new EmployeeWithDepartSpecif();
-            var employee=await _emploRepo.GetAllWithSpecAsync(spec);
+            var employee = await _emploRepo.GetAllWithSpecAsync(spec);
             return Ok(employee);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Employee>>GetEmployeeById(int id)
+        {
+            var spec = new EmployeeWithDepartSpecif(id);
+            var Employee =await _emploRepo.GetByIdWithSpecAsync(spec);
+            return Ok(Employee);
+
         }
     }
 }
