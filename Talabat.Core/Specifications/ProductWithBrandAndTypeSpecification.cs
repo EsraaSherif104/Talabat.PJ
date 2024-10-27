@@ -14,6 +14,13 @@ namespace Talabat.Core.Specifications
         {
             Include.Add(p => p.ProductType);
             Include.Add(p => p.ProductBrand);
-                }
+        }
+
+        //ctor for get product by id
+        public ProductWithBrandAndTypeSpecification(int id):base(p=>p.Id==id)
+        {
+            Include.Add(p => p.ProductType);
+            Include.Add(p => p.ProductBrand);
+        }
     }
 }
