@@ -3,6 +3,7 @@ using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
 using Talabat.Repository;
 using Talabat.Repository.Data;
+using Talabt.APIS.helpers;
 
 namespace Talabt.APIS
 {
@@ -26,7 +27,9 @@ namespace Talabt.APIS
             });
             //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+            // builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
+            builder.Services.AddAutoMapper(typeof(MappingProfiles));
+          
             #endregion
 
             var app = builder.Build();
