@@ -6,6 +6,7 @@ using Talabat.Repository;
 using Talabat.Repository.Data;
 using Talabt.APIS.Errors;
 using Talabt.APIS.helpers;
+using Talabt.APIS.MiddelWire;
 
 namespace Talabt.APIS
 {
@@ -88,6 +89,7 @@ namespace Talabt.APIS
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseMiddleware<ExceptionMiddlewire>();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
