@@ -37,7 +37,7 @@ namespace Talabt.APIS.Controllers
         //get product by id
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ProductToReturnDTO),StatusCodes.Status200OK)]
+       [ProducesResponseType(typeof(ProductToReturnDTO),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Product>> GetProductbYID(int id)
         {

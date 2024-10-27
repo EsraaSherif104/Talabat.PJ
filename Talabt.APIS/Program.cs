@@ -5,6 +5,7 @@ using Talabat.Core.Repositories;
 using Talabat.Repository;
 using Talabat.Repository.Data;
 using Talabt.APIS.Errors;
+using Talabt.APIS.Extention;
 using Talabt.APIS.helpers;
 using Talabt.APIS.MiddelWire;
 
@@ -24,33 +25,13 @@ namespace Talabt.APIS
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+          
             builder.Services.AddDbContext<StoreContext>(options=>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            // builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
-            builder.Services.AddAutoMapper(typeof(MappingProfiles));
-            builder.Services.Configure<ApiBehaviorOptions>(Options =>
-            {
-                Options.InvalidModelStateResponseFactory = (actionContext) =>
-                {
-                    //modelstat =>dictionary[keyvaluepair
-                    //key=>name of param
-                    //value=>error
+            builder.Services.AddApplicationService();
 
-                    var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0)
-                                            .SelectMany(p => p.Value.Errors)
-                                            .Select(e => e.ErrorMessage).ToArray();
-
-                    var validationErrorREsponse = new ApiValidationErrorResponse()
-                    {
-                        Errors = errors
-                    };
-                    return new BadRequestObjectResult(validationErrorREsponse);
-                };
-            });
             #endregion
 
             var app = builder.Build();
@@ -86,12 +67,12 @@ namespace Talabt.APIS
 
 
             #region Configure- Configure the HTTP request pipeline.
-            app.UseMiddleware<ExceptionMiddlewire>();
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseMiddleware<ExceptionMiddlewire>();
+
+                app.UseSwaggerMiddelWire();
             }
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
