@@ -37,7 +37,9 @@ namespace Talabt.APIS.Controllers
         //get product by id
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        [ProducesResponseType(typeof(ProductToReturnDTO),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Product>> GetProductbYID(int id)
         {
             var spec=new ProductWithBrandAndTypeSpecification(id);
             var product = await _productRepo.GetByIdWithSpecAsync(spec);
