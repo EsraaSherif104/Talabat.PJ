@@ -5,6 +5,7 @@ using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
 using Talabat.Core.Specifications;
 using Talabt.APIS.DTO;
+using Talabt.APIS.Errors;
 
 namespace Talabt.APIS.Controllers
 {
@@ -40,6 +41,7 @@ namespace Talabt.APIS.Controllers
         {
             var spec=new ProductWithBrandAndTypeSpecification(id);
             var product = await _productRepo.GetByIdWithSpecAsync(spec);
+            if (product is null) return NotFound(new ApiResponse(404));
             var MappedProduct = _mapper.Map<Product, ProductToReturnDTO>(product);
             return Ok(MappedProduct);
         }

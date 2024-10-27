@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.Repository.Data;
+using Talabt.APIS.Errors;
 
 namespace Talabt.APIS.Controllers
 {
@@ -19,7 +20,7 @@ namespace Talabt.APIS.Controllers
        public ActionResult GetNotFoundRequest()
         {
             var product = _dbcontext.Products.Find(100);
-            if(product == null) return NotFound();
+            if (product == null)return NotFound(new ApiResponse(404));
             return Ok(product);
         }
         [HttpGet("ServerError")]
