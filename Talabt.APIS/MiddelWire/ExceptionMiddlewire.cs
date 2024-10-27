@@ -46,7 +46,7 @@ namespace Talabt.APIS.MiddelWire
                 };
                 var jsonResponse=JsonSerializer.Serialize(response);
                
-                context.Response.WriteAsync(jsonResponse);
+                await context.Response.WriteAsync(jsonResponse);
             }
         }
     }

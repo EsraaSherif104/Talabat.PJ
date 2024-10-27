@@ -83,16 +83,18 @@ namespace Talabt.APIS
             }
 
             #endregion
-           
+
 
             #region Configure- Configure the HTTP request pipeline.
+            app.UseMiddleware<ExceptionMiddlewire>();
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseMiddleware<ExceptionMiddlewire>();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
