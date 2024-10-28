@@ -37,6 +37,9 @@ namespace Talabat.Core.Specifications
 
                 }
             }
+
+
+            ApplyPagination(param.PageSize * (param.PageIndex - 1), param.PageSize);
         }
 
         //ctor for get product by id

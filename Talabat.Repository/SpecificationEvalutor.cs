@@ -35,6 +35,14 @@ namespace Talabat.Repository
             {
                 Query= Query.OrderByDescending(spec.OrderByDescending);
             }
+
+
+            if (spec.IsPaginationEnable)
+            {
+                Query=Query.Skip(spec.Skip).Take(spec.Take);
+
+            }
+
             //p=>p.productBrand ,p=>p.producttype
 
            
