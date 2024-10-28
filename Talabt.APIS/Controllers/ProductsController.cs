@@ -37,12 +37,16 @@ namespace Talabt.APIS.Controllers
             var spec = new ProductWithBrandAndTypeSpecification(param);
             var products =await _productRepo.GetAllWithSpecAsync(spec);
             var MappedProduct=_mapper.Map<IReadOnlyList<Product>, IReadOnlyList< ProductToReturnDTO>>(products);
+            var CountSpec = new ProductWithFiltrationForCountAsync(param);
+            var count=await _productRepo.GetCountWithSpecAsync(CountSpec);
+            
+            #region comment
             //var ReturedObject = new Pagination<ProductToReturnDTO>()
             //{
             //    PageIndex=param.PageIndex,
             //    PageSize=param.PageSize,
             //    Data=MappedProduct
-            
+
 
             //};
 
@@ -50,8 +54,9 @@ namespace Talabt.APIS.Controllers
 
 
             //OkObjectResult result=new OkObjectResult(products); 
-            //return (result);
-            return Ok(new Pagination<ProductToReturnDTO>(param.PageIndex,param.PageSize,MappedProduct));
+            //return (result); 
+            #endregion
+            return Ok(new Pagination<ProductToReturnDTO>(param.PageIndex,param.PageSize,MappedProduct, count));
 
         }
         //get product by id
