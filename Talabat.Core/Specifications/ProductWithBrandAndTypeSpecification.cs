@@ -10,19 +10,19 @@ namespace Talabat.Core.Specifications
     public class ProductWithBrandAndTypeSpecification:BaseSpecification<Product>
     {
         //is used for get all 
-        public ProductWithBrandAndTypeSpecification(string sort,int? BrandId,int? TypeId)
+        public ProductWithBrandAndTypeSpecification(ProductSpecParam param)
             : base(p=>
-            (!BrandId.HasValue || p.ProductBrandId==BrandId)
+            (!param.BrandID.HasValue || p.ProductBrandId==param.BrandID)
             &&
-            (!TypeId.HasValue ||p.ProductTypeId==TypeId)
+            (!param.TypeId.HasValue ||p.ProductTypeId==param.TypeId)
             )
         {
             Include.Add(p => p.ProductType);
             Include.Add(p => p.ProductBrand);
 
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(param.sort))
             {
-                switch(sort)
+                switch(param.sort)
                 {
                     case "PriceAsc":
                         AddOrderBy(p => p.Price);
