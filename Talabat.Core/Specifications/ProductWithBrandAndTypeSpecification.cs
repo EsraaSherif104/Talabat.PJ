@@ -10,7 +10,12 @@ namespace Talabat.Core.Specifications
     public class ProductWithBrandAndTypeSpecification:BaseSpecification<Product>
     {
         //is used for get all 
-        public ProductWithBrandAndTypeSpecification(string sort):base()
+        public ProductWithBrandAndTypeSpecification(string sort,int? BrandId,int? TypeId)
+            : base(p=>
+            (!BrandId.HasValue || p.ProductBrandId==BrandId)
+            &&
+            (!TypeId.HasValue ||p.ProductTypeId==TypeId)
+            )
         {
             Include.Add(p => p.ProductType);
             Include.Add(p => p.ProductBrand);
