@@ -10,7 +10,7 @@ using Talabat.Core.Repositories;
 
 namespace Talabat.Repository
 {
-    internal class BasketRepository : IBasketRepository
+    public class BasketRepository : IBasketRepository
     {
         private readonly IDatabase _database;
 
