@@ -31,9 +31,9 @@ namespace Talabt.APIS.Controllers
         //get all product
         //baseurl/api/product ->get
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts(string sort)
         {
-            var spec = new ProductWithBrandAndTypeSpecification();
+            var spec = new ProductWithBrandAndTypeSpecification(sort);
             var products =await _productRepo.GetAllWithSpecAsync(spec);
             var MappedProduct=_mapper.Map<IReadOnlyList<Product>, IReadOnlyList< ProductToReturnDTO>>(products);   
             
