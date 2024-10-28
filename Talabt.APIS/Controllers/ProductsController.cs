@@ -6,6 +6,7 @@ using Talabat.Core.Repositories;
 using Talabat.Core.Specifications;
 using Talabt.APIS.DTO;
 using Talabt.APIS.Errors;
+using Talabt.APIS.helpers;
 
 namespace Talabt.APIS.Controllers
 {
@@ -31,15 +32,26 @@ namespace Talabt.APIS.Controllers
         //get all product
         //baseurl/api/product ->get
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts([FromQuery]ProductSpecParam param )
+        public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetProducts([FromQuery]ProductSpecParam param )
         {
             var spec = new ProductWithBrandAndTypeSpecification(param);
             var products =await _productRepo.GetAllWithSpecAsync(spec);
-            var MappedProduct=_mapper.Map<IReadOnlyList<Product>, IReadOnlyList< ProductToReturnDTO>>(products);   
+            var MappedProduct=_mapper.Map<IReadOnlyList<Product>, IReadOnlyList< ProductToReturnDTO>>(products);
+            //var ReturedObject = new Pagination<ProductToReturnDTO>()
+            //{
+            //    PageIndex=param.PageIndex,
+            //    PageSize=param.PageSize,
+            //    Data=MappedProduct
             
+
+            //};
+
+
+
+
             //OkObjectResult result=new OkObjectResult(products); 
             //return (result);
-            return Ok(MappedProduct);
+            return Ok(new Pagination<ProductToReturnDTO>(param.PageIndex,param.PageSize,MappedProduct));
 
         }
         //get product by id
