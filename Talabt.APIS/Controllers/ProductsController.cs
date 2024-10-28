@@ -36,6 +36,7 @@ namespace Talabt.APIS.Controllers
         {
             var spec = new ProductWithBrandAndTypeSpecification(param);
             var products =await _productRepo.GetAllWithSpecAsync(spec);
+
             var MappedProduct=_mapper.Map<IReadOnlyList<Product>, IReadOnlyList< ProductToReturnDTO>>(products);
             var CountSpec = new ProductWithFiltrationForCountAsync(param);
             var count=await _productRepo.GetCountWithSpecAsync(CountSpec);

@@ -16,6 +16,7 @@ namespace Talabat.Core.Specifications
         public int? TypeId { get; set;}
 
         private int pageSize=5;
+        public int PageIndex { get; set; } = 1;
 
         public int PageSize
         {
@@ -23,8 +24,14 @@ namespace Talabat.Core.Specifications
             set { pageSize = value>10?10:value; }
         }
 
-        public int PageIndex { get; set; } = 1;
 
+        private string? search;
+
+        public string Search
+        {
+            get { return search; }
+            set { search = value.ToLower(); }
+        }
 
 
 
