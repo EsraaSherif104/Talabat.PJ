@@ -14,7 +14,7 @@ namespace Talabt.APIS.helpers
                          .ForMember(d=>d.ProductBrand,o=>o.MapFrom(s=>s.ProductBrand.Name))
                          .ForMember(d=>d.PictureUrl,o=>o.MapFrom<ProductPictureUrlResolver>());
 
-            CreateMap<Addres, AddressDTO>();
+            CreateMap<Addres, AddressDTO>().ReverseMap();
         }
     }
 }
