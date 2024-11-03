@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositories;
+using Talabat.Core.Repositories.Identity;
 using Talabat.Repository;
 using Talabat.Repository.Data;
 using Talabt.APIS.Errors;
@@ -32,6 +34,10 @@ namespace Talabt.APIS
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.AddDbContext<AppIdentityDbcontext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
             builder.Services.AddSingleton < IConnectionMultiplexer>(options=>
            {
                var connection = builder.Configuration.GetConnectionString("RedisConnection");
@@ -64,6 +70,11 @@ namespace Talabt.APIS
                 //ask clr for creating object from dbcontext explicity
                 await dbcontext.Database.MigrateAsync();
                 //  scope.Dispose();
+
+                var IdentityDbcontext = services.GetRequiredService<AppIdentityDbcontext>();
+                await IdentityDbcontext.Database.MigrateAsync();
+
+
                 await  StoreContextSeed.SeedAsync(dbcontext);
 
 
