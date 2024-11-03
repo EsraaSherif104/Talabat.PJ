@@ -1,9 +1,15 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 using Talabat.Core.Entities;
+using Talabat.Core.Entities.identity;
 using Talabat.Core.Repositories;
+using Talabat.Core.Repositories.Identity;
 using Talabat.Repository;
 using Talabat.Repository.Data;
+using Talabat.Repository.Identity;
 using Talabt.APIS.Errors;
 using Talabt.APIS.Extention;
 using Talabt.APIS.helpers;
@@ -30,8 +36,21 @@ namespace Talabt.APIS
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddApplicationService();
 
+            builder.Services.AddDbContext<AppIdentityDbcontext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
+            builder.Services.AddSingleton < IConnectionMultiplexer>(options=>
+           {
+               var connection = builder.Configuration.GetConnectionString("RedisConnection");
+               return ConnectionMultiplexer.Connect(connection);
+           
+           } );
+            
+            
+            builder.Services.AddApplicationService();
+            builder.Services.AddIdentityServices(builder.Configuration);
             #endregion
 
             var app = builder.Build();
@@ -51,6 +70,13 @@ namespace Talabt.APIS
                 //ask clr for creating object from dbcontext explicity
                 await dbcontext.Database.MigrateAsync();
                 //  scope.Dispose();
+
+                var IdentityDbcontext = services.GetRequiredService<AppIdentityDbcontext>();
+                await IdentityDbcontext.Database.MigrateAsync();
+                var usermanger = services.GetRequiredService<UserManager<AppUser>>();
+                
+                await AppIdentityDbcontextSeed.SeedUserAsync(usermanger);
+
                 await  StoreContextSeed.SeedAsync(dbcontext);
 
 
@@ -75,10 +101,10 @@ namespace Talabt.APIS
                 app.UseSwaggerMiddelWire();
             }
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles();
-
-            app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

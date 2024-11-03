@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.Core.Entities;
@@ -31,11 +33,13 @@ namespace Talabt.APIS.Controllers
         }
         //get all product
         //baseurl/api/product ->get
+        [Authorize]  
         [HttpGet]
         public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetProducts([FromQuery]ProductSpecParam param )
         {
             var spec = new ProductWithBrandAndTypeSpecification(param);
             var products =await _productRepo.GetAllWithSpecAsync(spec);
+
             var MappedProduct=_mapper.Map<IReadOnlyList<Product>, IReadOnlyList< ProductToReturnDTO>>(products);
             var CountSpec = new ProductWithFiltrationForCountAsync(param);
             var count=await _productRepo.GetCountWithSpecAsync(CountSpec);

@@ -12,6 +12,8 @@ namespace Talabat.Core.Specifications
         //is used for get all 
         public ProductWithBrandAndTypeSpecification(ProductSpecParam param)
             : base(p=>
+            (string.IsNullOrEmpty(param.Search) || p.Name.ToLower().Contains(param.Search))
+            &&
             (!param.BrandID.HasValue || p.ProductBrandId==param.BrandID)
             &&
             (!param.TypeId.HasValue ||p.ProductTypeId==param.TypeId)
