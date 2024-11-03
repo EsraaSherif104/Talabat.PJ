@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 using Talabat.Core.Entities.identity;
+using Talabat.Core.Services;
 using Talabt.APIS.DTO;
 using Talabt.APIS.Errors;
 
@@ -13,11 +14,15 @@ namespace Talabt.APIS.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly ITokenServices _tokenServices;
 
-        public AccountsController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager)
+        public AccountsController(UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+           ITokenServices tokenServices )
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
+            this._tokenServices = tokenServices;
         }
 
         //register
@@ -40,7 +45,7 @@ namespace Talabt.APIS.Controllers
             {
                 DisplayName = User.DisplayName,
                 Email = User.Email,
-                Token = "this will be token"
+                Token =await _tokenServices.CreateTokenAsync(User, _userManager)
             };
             return Ok(returneduser);
         
@@ -63,7 +68,7 @@ namespace Talabt.APIS.Controllers
             {
                 DisplayName = User.DisplayName,
                 Email = User.Email,
-                Token = "this will be token"
+                Token =await _tokenServices.CreateTokenAsync(User,_userManager)
             });
         }
 
