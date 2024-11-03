@@ -1,12 +1,15 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using Talabat.Core.Entities;
+using Talabat.Core.Entities.identity;
 using Talabat.Core.Repositories;
 using Talabat.Core.Repositories.Identity;
 using Talabat.Repository;
 using Talabat.Repository.Data;
+using Talabat.Repository.Identity;
 using Talabt.APIS.Errors;
 using Talabt.APIS.Extention;
 using Talabt.APIS.helpers;
@@ -47,10 +50,7 @@ namespace Talabt.APIS
             
             
             builder.Services.AddApplicationService();
-
-
-            
-
+            builder.Services.AddIdentityServices();
             #endregion
 
             var app = builder.Build();
@@ -73,7 +73,9 @@ namespace Talabt.APIS
 
                 var IdentityDbcontext = services.GetRequiredService<AppIdentityDbcontext>();
                 await IdentityDbcontext.Database.MigrateAsync();
-
+                var usermanger = services.GetRequiredService<UserManager<AppUser>>();
+                
+                await AppIdentityDbcontextSeed.SeedUserAsync(usermanger);
 
                 await  StoreContextSeed.SeedAsync(dbcontext);
 
