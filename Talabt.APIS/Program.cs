@@ -50,7 +50,7 @@ namespace Talabt.APIS
             
             
             builder.Services.AddApplicationService();
-            builder.Services.AddIdentityServices();
+            builder.Services.AddIdentityServices(builder.Configuration);
             #endregion
 
             var app = builder.Build();
@@ -101,10 +101,10 @@ namespace Talabt.APIS
                 app.UseSwaggerMiddelWire();
             }
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles();
-
-            app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
