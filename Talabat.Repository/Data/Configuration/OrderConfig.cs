@@ -21,7 +21,11 @@ namespace Talabat.Repository.Data.Configuration
                    .HasColumnType("decimal(18,2)");
             
             builder.OwnsOne(o => o.ShippingAddress, x => x.WithOwner());
-       
+            builder.HasOne(o => o.DeliveryMethod)
+                   .WithMany()
+                   .OnDelete(DeleteBehavior.NoAction);
+
+
            
         
         }
