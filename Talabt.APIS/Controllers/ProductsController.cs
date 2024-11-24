@@ -71,7 +71,7 @@ namespace Talabt.APIS.Controllers
         public async Task<ActionResult<Product>> GetProductbYID(int id)
         {
             var spec=new ProductWithBrandAndTypeSpecification(id);
-            var product = await _productRepo.GetByIdWithSpecAsync(spec);
+            var product = await _productRepo.GetEntityWithSpecAsync(spec);
             if (product is null) return NotFound(new ApiResponse(404));
             var MappedProduct = _mapper.Map<Product, ProductToReturnDTO>(product);
             return Ok(MappedProduct);

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Talabat.Core;
 using Talabat.Core.Repositories;
+using Talabat.Core.Services;
 using Talabat.Repository;
+using Talabat.Services;
 using Talabt.APIS.Errors;
 using Talabt.APIS.helpers;
 
@@ -12,8 +15,7 @@ namespace Talabt.APIS.Extention
         {
             Services.AddScoped(typeof(IBasketRepository),typeof(BasketRepository));
             Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
-            // builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
+            
             Services.AddAutoMapper(typeof(MappingProfiles));
             #region handle error
             Services.Configure<ApiBehaviorOptions>(Options =>
@@ -36,6 +38,11 @@ namespace Talabt.APIS.Extention
                 };
             });
             #endregion
+            Services.AddScoped<IUniteOfWork, UniteOfWork>();
+            Services.AddScoped<IOrderServices, OrderService>();
+            Services.AddScoped<IPaymentService, PaymentServices>();
+
+
             return Services;
         }
     }

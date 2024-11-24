@@ -14,5 +14,11 @@ namespace Talabat.Core.Entities
         {
             Id= id;
         }
+        public string? PaymentIntentId { get; set; }
+
+        public string? ClientSecret { get; set; }
+
+        public int? deliveryMethodId { get; set; }
+
     }
 }

@@ -9,5 +9,15 @@ namespace Talabt.APIS.DTO
 
         public List<BasketItemDTO> Items { get; set; }
 
+
+        public string? PaymentIntentId { get; set; }
+
+        public string? ClientSecret { get; set; }
+
+        public int? deliveryMethodId { get; set; }
+
+
+
+
     }
 }
