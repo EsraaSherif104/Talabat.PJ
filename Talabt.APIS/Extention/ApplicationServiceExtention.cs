@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Talabat.Core;
 using Talabat.Core.Repositories;
+using Talabat.Core.Services;
 using Talabat.Repository;
+using Talabat.Services;
 using Talabt.APIS.Errors;
 using Talabt.APIS.helpers;
 
@@ -37,6 +39,9 @@ namespace Talabt.APIS.Extention
             });
             #endregion
             Services.AddScoped<IUniteOfWork, UniteOfWork>();
+            Services.AddScoped<IOrderServices, OrderService>();
+
+
             return Services;
         }
     }

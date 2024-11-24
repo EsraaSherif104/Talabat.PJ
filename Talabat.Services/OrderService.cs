@@ -65,10 +65,12 @@ namespace Talabat.Services
 
         public Task<Order> GetOrderByIdWithSpecificUserAsync(string BuyerEmail, int orderId)
         {
+            throw new NotImplementedException();
         }
 
         public Task<IReadOnlyList<Order>> GetOrderWithSpecificUserAsync(string BuyerEmail)
         {
+            throw new NotImplementedException();
         }
     }
 }
