@@ -9,7 +9,7 @@ namespace Talabat.Core.Specifications.OrderSpecifications
 {
     public class OrderSpecifications:BaseSpecification<Order>
     {
-
+        //get orders for user
         public OrderSpecifications(string email):base(o=>o.BuyerEmail==email) 
         {
 
@@ -17,6 +17,11 @@ namespace Talabat.Core.Specifications.OrderSpecifications
             Include.Add(o => o.Items);
             AddOrderByDesc(o => o.OrderDate);
         }
-
+        //used to get order for user
+        public OrderSpecifications(string email,int id):base(o=>o.Id==id && o.BuyerEmail==email)
+        {
+            Include.Add(o => o.DeliveryMethod);
+            Include.Add(o => o.Items);
+        }
     }
 }
