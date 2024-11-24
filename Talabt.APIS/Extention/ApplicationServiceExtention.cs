@@ -40,6 +40,7 @@ namespace Talabt.APIS.Extention
             #endregion
             Services.AddScoped<IUniteOfWork, UniteOfWork>();
             Services.AddScoped<IOrderServices, OrderService>();
+            Services.AddScoped<IPaymentService, PaymentServices>();
 
 
             return Services;
