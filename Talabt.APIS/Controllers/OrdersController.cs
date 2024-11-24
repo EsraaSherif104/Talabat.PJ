@@ -45,12 +45,14 @@ namespace Talabt.APIS.Controllers
         [ProducesResponseType(typeof(IReadOnlyList<Talabat.Core.Entities.Order_Aggra.Order>) , StatusCodes.Status200OK)]
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Talabat.Core.Entities.Order_Aggra.Order>>> GetOrdersForUser() 
+        public async Task<ActionResult<IReadOnlyList<OrderToReturnDTO>>> GetOrdersForUser() 
         {
             var BuyerEmail = User.FindFirstValue(ClaimTypes.Email);
             var orders = await _orderServices.GetOrderWithSpecificUserAsync(BuyerEmail);
             if (orders is null) return NotFound(new ApiResponse(404, "there is no orders for this user"));
-            return Ok(orders);
+            var mappedOrders = _mapper.Map<IReadOnlyList<Talabat.Core.Entities.Order_Aggra.Order>, IReadOnlyList<OrderToReturnDTO>>  (orders);
+            
+            return Ok(mappedOrders);
         
         }
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -63,7 +65,9 @@ namespace Talabt.APIS.Controllers
             var BuyerEmail = User.FindFirstValue(ClaimTypes.Email);
             var order = await _orderServices.GetOrderByIdWithSpecificUserAsync(BuyerEmail,id);
             if (order is null) return NotFound(new ApiResponse(404, $"there is no order with {id} for  this user"));
-            return Ok(order);
+            var mappedOrders = _mapper.Map<Talabat.Core.Entities.Order_Aggra.Order,OrderToReturnDTO> (order);
+
+            return Ok(mappedOrders);
         }
 
     }
