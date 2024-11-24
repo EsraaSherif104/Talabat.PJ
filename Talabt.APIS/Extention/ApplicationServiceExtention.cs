@@ -13,6 +13,7 @@ namespace Talabt.APIS.Extention
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection Services)
         {
+            Services.AddSingleton<IResponseCasheService,ResponseCacheServices>();
             Services.AddScoped(typeof(IBasketRepository),typeof(BasketRepository));
             Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             
