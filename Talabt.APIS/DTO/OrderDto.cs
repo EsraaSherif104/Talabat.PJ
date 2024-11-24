@@ -13,6 +13,6 @@ namespace Talabt.APIS.DTO
         public string BasketId { get; set; }
         [Required]
 
-        public AddressDTO Shippingaddress { get; set; }
+        public AddressDTO ShipToAddress { get; set; }
     }
 }
