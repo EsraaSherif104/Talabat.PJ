@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Stripe;
@@ -20,6 +21,7 @@ namespace Talabt.APIS.Controllers
         {
             this._paymentService = paymentService;
         }
+        [Authorize]
         [ProducesResponseType(typeof(CustomerBasketDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [HttpPost("{basketId}")]
