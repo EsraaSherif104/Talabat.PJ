@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
 using System.Security.Claims;
+using Talabat.Core;
 using Talabat.Core.Entities.Core_Aggra;
 using Talabat.Core.Entities.Order_Aggra;
 using Talabat.Core.Services;
@@ -17,11 +18,14 @@ namespace Talabt.APIS.Controllers
     {
         private readonly IOrderServices _orderServices;
         private readonly IMapper _mapper;
+        private readonly IUniteOfWork _uniteOfWork;
 
-        public OrdersController(IOrderServices orderServices,IMapper mapper)
+        public OrdersController(IOrderServices orderServices,IMapper mapper
+            ,IUniteOfWork uniteOfWork)
         {
             this._orderServices = orderServices;
             this._mapper = mapper;
+            this._uniteOfWork = uniteOfWork;
         }
 
         //CRREATE ORDER
@@ -69,6 +73,15 @@ namespace Talabt.APIS.Controllers
 
             return Ok(mappedOrders);
         }
+
+        [HttpGet("DeliveryMethods")]
+
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethod()
+        {
+            var DeliveryMethod = await _uniteOfWork.Repository<DeliveryMethod>().GetAllAsync();
+            return Ok(DeliveryMethod);
+        }
+
 
     }
 }
