@@ -103,10 +103,10 @@ namespace Talabt.APIS
 
 
             #region Configure- Configure the HTTP request pipeline.
+            app.UseMiddleware<ExceptionMiddlewire>();
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseMiddleware<ExceptionMiddlewire>();
 
                 app.UseSwaggerMiddelWire();
             }

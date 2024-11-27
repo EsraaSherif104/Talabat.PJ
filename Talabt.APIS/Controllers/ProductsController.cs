@@ -33,7 +33,7 @@ namespace Talabt.APIS.Controllers
         }
         //get all product
         //baseurl/api/product ->get
-        [Authorize]  
+        [CachedAttribute(300)]  
         [HttpGet]
         public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetProducts([FromQuery]ProductSpecParam param )
         {
