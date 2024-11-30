@@ -1,8 +1,19 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 using Talabat.Core.Entities;
+using Talabat.Core.Entities.identity;
 using Talabat.Core.Repositories;
+using Talabat.Core.Repositories.Identity;
 using Talabat.Repository;
 using Talabat.Repository.Data;
+using Talabat.Repository.Identity;
+using Talabt.APIS.Errors;
+using Talabt.APIS.Extention;
+using Talabt.APIS.helpers;
+using Talabt.APIS.MiddelWire;
 
 namespace Talabt.APIS
 {
@@ -20,13 +31,36 @@ namespace Talabt.APIS
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+          
             builder.Services.AddDbContext<StoreContext>(options=>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            //builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+            builder.Services.AddDbContext<AppIdentityDbcontext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
+            builder.Services.AddSingleton < IConnectionMultiplexer>(options=>
+           {
+               var connection = builder.Configuration.GetConnectionString("RedisConnection");
+               return ConnectionMultiplexer.Connect(connection);
+           
+           } );
+            
+            
+            builder.Services.AddApplicationService();
+            builder.Services.AddIdentityServices(builder.Configuration);
+           builder.Services.AddCors(options=>
+           {
+               options.AddPolicy("MyPolicy", options =>
+               {
+                   options.AllowAnyHeader();
+                   options.AllowAnyMethod();
+                  // options.WithOrigins(builder.Configuration["FrontBaseUrl"]);
+               });
+           });
+            
             #endregion
 
             var app = builder.Build();
@@ -46,6 +80,13 @@ namespace Talabt.APIS
                 //ask clr for creating object from dbcontext explicity
                 await dbcontext.Database.MigrateAsync();
                 //  scope.Dispose();
+
+                var IdentityDbcontext = services.GetRequiredService<AppIdentityDbcontext>();
+                await IdentityDbcontext.Database.MigrateAsync();
+                var usermanger = services.GetRequiredService<UserManager<AppUser>>();
+                
+                await AppIdentityDbcontextSeed.SeedUserAsync(usermanger);
+
                 await  StoreContextSeed.SeedAsync(dbcontext);
 
 
@@ -59,17 +100,22 @@ namespace Talabt.APIS
             }
 
             #endregion
-           
+
 
             #region Configure- Configure the HTTP request pipeline.
+            app.UseMiddleware<ExceptionMiddlewire>();
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
 
+                app.UseSwaggerMiddelWire();
+            }
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+            app.UseCors("MyPolicy");  
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
